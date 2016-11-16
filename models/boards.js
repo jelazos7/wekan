@@ -96,6 +96,21 @@ Boards.attachSchema(new SimpleSchema({
       'blue', 'sky', 'lime', 'pink', 'black',
     ],
   },
+  'labels.$.symbol': {
+    type: String,
+    allowedValues: [
+      // 0-9
+      '&#x0030;','&#x0031;','&#x0032;','&#x0033;','&#x0034;',
+      '&#x0035;','&#x0036;','&#x0037;','&#x0038;','&#x0039;',
+      // A-Z
+      '&#x0041;','&#x0042;','&#x0043;','&#x0044;','&#x0045;',
+      '&#x0046;','&#x0047;','&#x0048;','&#x0049;','&#x004A;',
+      '&#x004B;','&#x004C;','&#x004D;','&#x004E;','&#x004F;',
+      '&#x0050;','&#x0051;','&#x0052;','&#x0053;','&#x0054;',
+      '&#x0055;','&#x0056;','&#x0057;','&#x0058;','&#x0059;',
+      '&#x005A;'
+    ]
+  },
   // XXX We might want to maintain more informations under the member sub-
   // documents like de-normalized meta-data (the date the member joined the
   // board, the number of contributions, etc.).
@@ -199,8 +214,8 @@ Boards.helpers({
     return Users.find({ _id: {$in: _.pluck(this.members, 'userId')} });
   },
 
-  getLabel(name, color) {
-    return _.findWhere(this.labels, { name, color });
+  getLabel(name, color, symbol) {
+    return _.findWhere(this.labels, { name, color, symbol });
   },
 
   labelIndex(labelId) {
@@ -229,9 +244,9 @@ Boards.helpers({
 
   // XXX currently mutations return no value so we have an issue when using addLabel in import
   // XXX waiting on https://github.com/mquandalle/meteor-collection-mutations/issues/1 to remove...
-  pushLabel(name, color) {
+  pushLabel(name, color, symbol) {
     const _id = Random.id(6);
-    Boards.direct.update(this._id, { $push: {labels: { _id, name, color }}});
+    Boards.direct.update(this._id, { $push: {labels: { _id, name, color, symbol }}});
     return _id;
   },
 });
@@ -261,25 +276,26 @@ Boards.mutations({
     return { $set: { permission: visibility }};
   },
 
-  addLabel(name, color) {
-    // If label with the same name and color already exists we don't want to
+  addLabel(name, color, symbol) {
+    // If label with the same name and color and symbol already exists we don't want to
     // create another one because they would be indistinguishable in the UI
     // (they would still have different `_id` but that is not exposed to the
     // user).
-    if (!this.getLabel(name, color)) {
+    if (!this.getLabel(name, color, symbol)) {
       const _id = Random.id(6);
-      return { $push: {labels: { _id, name, color }}};
+      return { $push: {labels: { _id, name, color, symbol }}};
     }
     return {};
   },
 
-  editLabel(labelId, name, color) {
-    if (!this.getLabel(name, color)) {
+  editLabel(labelId, name, color, symbol) {
+    if (!this.getLabel(name, color, symbol)) {
       const labelIndex = this.labelIndex(labelId);
       return {
         $set: {
           [`labels.${labelIndex}.name`]: name,
           [`labels.${labelIndex}.color`]: color,
+          [`labels.${labelIndex}.symbol`]: symbol
         },
       };
     }

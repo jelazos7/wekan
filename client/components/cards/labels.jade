@@ -5,8 +5,15 @@ template(name="formLabel")
   label {{_ "select-color"}}
   .palette-colors: each labels
     span.card-label.palette-color.js-palette-color(class="card-label-{{color}}")
-      if(isSelected color)
+      if(isColorSelected color)
         i.fa.fa-check
+
+  label {{_ "select-symbol"}}
+  .palette-symbols: each symbols
+    if(isSymbolSelected symbol)
+      span.palette-symbol.js-palette-symbol.palette-symbol-selected !{symbol}
+    else
+      span.palette-symbol.js-palette-symbol !{symbol}
 
 template(name="createLabelPopup")
   form.create-label

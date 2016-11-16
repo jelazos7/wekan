@@ -1,27 +1,40 @@
 let labelColors;
+let labelSymbols;
 Meteor.startup(() => {
   labelColors = Boards.simpleSchema()._schema['labels.$.color'].allowedValues;
+  labelSymbols = Boards.simpleSchema()._schema['labels.$.symbol'].allowedValues;
 });
 
 BlazeComponent.extendComponent({
   onCreated() {
     this.currentColor = new ReactiveVar(this.data().color);
+    this.currentSymbol = new ReactiveVar(this.data().symbol);
   },
 
   labels() {
     return labelColors.map((color) => ({ color, name: '' }));
   },
 
-  isSelected(color) {
+  symbols() {
+    return labelSymbols.map((symbol) => ({ symbol, name: ''}));
+  },
+
+  isColorSelected(color) {
     return this.currentColor.get() === color;
+  },
+
+  isSymbolSelected(symbol) {
+    return this.currentSymbol.get() === symbol;
   },
 
   events() {
     return [{
       'click .js-palette-color'() {
         this.currentColor.set(this.currentData().color);
-      },
-    }];
+    }},{
+      'click .js-palette-symbol'() {
+        this.currentSymbol.set(this.currentData().symbol);
+    }}];
   },
 }).register('formLabel');
 
@@ -67,7 +80,8 @@ Template.createLabelPopup.events({
     const board = Boards.findOne(Session.get('currentBoard'));
     const name = tpl.$('#labelName').val().trim();
     const color = Blaze.getData(tpl.find('.fa-check')).color;
-    board.addLabel(name, color);
+    const symbol = Blaze.getData(tpl.find('.palette-symbol-selected')).symbol;
+    board.addLabel(name, color, symbol);
     Popup.back();
   },
 });
@@ -83,7 +97,8 @@ Template.editLabelPopup.events({
     const board = Boards.findOne(Session.get('currentBoard'));
     const name = tpl.$('#labelName').val().trim();
     const color = Blaze.getData(tpl.find('.fa-check')).color;
-    board.editLabel(this._id, name, color);
+    const symbol = Blaze.getData(tpl.find('.palette-symbol-selected')).symbol;
+    board.editLabel(this._id, name, color, symbol);
     Popup.back();
   },
 });

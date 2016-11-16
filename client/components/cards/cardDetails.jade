@@ -30,7 +30,7 @@ template(name="cardDetails")
         h3.card-details-item-title {{_ 'labels'}}
         a(class="{{#if currentUser.isBoardMember}}js-add-labels{{else}}is-disabled{{/if}}" title="{{_ 'card-labels-title'}}")
           each labels
-            span.card-label(class="card-label-{{color}}" title=name)= name
+            span.card-label(class="card-label-{{color}}" title=name) !{symbol} {{name}}
         if currentUser.isBoardMember
           a.card-label.add-label.js-add-labels(title="{{_ 'card-labels-title'}}")
             i.fa.fa-plus
