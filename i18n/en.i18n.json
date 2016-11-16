@@ -263,7 +263,7 @@
     "save": "Save",
     "search": "Search",
     "select-color": "Select a color",
-    "select-symbol": "Select a symbol",
+    "select-symbol": "Select a symbol (optional)",
     "shortcut-assign-self": "Assign yourself to current card",
     "shortcut-autocomplete-emoji": "Autocomplete emoji",
     "shortcut-autocomplete-members": "Autocomplete members",
