@@ -8,7 +8,7 @@ template(name="filterSidebar")
     each currentBoard.labels
       li
         a.name.js-toggle-label-filter
-          span.card-label.square(class="card-label-{{color}}")
+          span.filter-card-label.card-label.square(class="card-label-{{color}}") !{symbol}
           span.sidebar-list-item-description
             if name
               = name
@@ -86,4 +86,3 @@ template(name="disambiguateMultiMemberPopup")
 
 template(name="moveSelectionPopup")
   +boardLists
-
