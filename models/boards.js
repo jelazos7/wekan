@@ -108,7 +108,14 @@ Boards.attachSchema(new SimpleSchema({
       '&#x004B;','&#x004C;','&#x004D;','&#x004E;','&#x004F;',
       '&#x0050;','&#x0051;','&#x0052;','&#x0053;','&#x0054;',
       '&#x0055;','&#x0056;','&#x0057;','&#x0058;','&#x0059;',
-      '&#x005A;'
+      '&#x005A;',
+      // workflow
+      '&#x2714;','&#x2716;',
+      // shapes
+      '&#x25B2;','&#x25C6;','&#x25A0;','&#x25CF;',
+      // misc
+      '&#x271A;','&#x003F;','&#x0021;','&#x2764;','&#x2605;','&#x0024;'
+
     ]
   },
   // XXX We might want to maintain more informations under the member sub-
